@@ -7,15 +7,23 @@ import (
 
 type ParseNumbersTest struct {
 	Input    string
-	Expected []int
+	Expected []Number
 }
 
-func (pnt ParseNumbersTest) Test() (found []int, expected bool) {
+func (pnt ParseNumbersTest) Test() (found []Number, expected bool) {
 	found, err := parseNumbersFromString(pnt.Input)
 	if err != nil {
 		return found, false
 	}
-	if match := slices.Compare(found, pnt.Expected); match == 0 {
+	match := slices.CompareFunc(found, pnt.Expected, func(x, y Number) int {
+		if x.Value < y.Value {
+			return -1
+		} else if x.Value > y.Value {
+			return 1
+		}
+		return 0
+	})
+	if match == 0 {
 		expected = true
 	} else {
 		expected = false
@@ -40,10 +48,10 @@ func (pct ParseCalibrationTest) Test() (found int, expected bool) {
 
 func TestParseNumbersFromString(t *testing.T) {
 	tests := []ParseNumbersTest{
-		{"1abc2", []int{1, 2}},
-		{"pqr3stu8vwx", []int{3, 8}},
-		{"a1b2c3d4e5f", []int{1, 2, 3, 4, 5}},
-		{"treb7uchet", []int{7}},
+		{"1abc2", []Number{{1, 0}, {2, 4}}},
+		{"pqr3stu8vwx", []Number{{3, 3}, {8, 7}}},
+		{"a1b2c3d4e5f", []Number{{1, 1}, {2, 3}, {3, 5}, {4, 7}, {5, 9}}},
+		{"treb7uchet", []Number{{7, 4}}},
 	}
 
 	for _, test := range tests {
