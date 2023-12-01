@@ -52,12 +52,16 @@ func main() {
 	}
 	defer file.Close()
 
+    var sum int
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
-		// line = scanner.Text()
+		line := scanner.Text()
+		sum += parseCalibrationNumbers(line)
 	}
 
 	if err := scanner.Err(); err != nil {
 		fmt.Printf("Scanner error: %v", err)
 	}
+
+	fmt.Printf("Challenge 1 - Calibration total: %d\n", sum)
 }
