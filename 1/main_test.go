@@ -1,8 +1,8 @@
 package main
 
 import (
-    "testing"
-    "slices"
+	"slices"
+	"testing"
 )
 
 type ParseNumbersTest struct {
@@ -14,7 +14,7 @@ type ParseNumbersTest struct {
 func (pnt ParseNumbersTest) Test() (found []int, expected bool) {
 	found, err := parseNumbersFromString(pnt.Input)
 	if err != nil {
-    	return found, false
+		return found, false
 	}
 	if match := slices.Compare(found, pnt.Expected); match == 0 {
 		expected = true
@@ -44,7 +44,7 @@ func TestParseNumbersFromString(t *testing.T) {
 	tests := []ParseNumbersTest{
 		{"1abc2", []int{1, 2}, true},
 		{"pqr3stu8vwx", []int{3, 8}, true},
-		{"a1b2c3d4e5f", []int{1,2,3,4,5}, true},
+		{"a1b2c3d4e5f", []int{1, 2, 3, 4, 5}, true},
 		{"treb7uchet", []int{7}, true},
 	}
 
