@@ -8,7 +8,6 @@ import (
 type ParseNumbersTest struct {
 	Input    string
 	Expected []int
-	Pass     bool
 }
 
 func (pnt ParseNumbersTest) Test() (found []int, expected bool) {
@@ -27,7 +26,6 @@ func (pnt ParseNumbersTest) Test() (found []int, expected bool) {
 type ParseCalibrationTest struct {
 	Input    string
 	Expected int
-	Pass     bool
 }
 
 func (pct ParseCalibrationTest) Test() (found int, expected bool) {
@@ -42,14 +40,14 @@ func (pct ParseCalibrationTest) Test() (found int, expected bool) {
 
 func TestParseNumbersFromString(t *testing.T) {
 	tests := []ParseNumbersTest{
-		{"1abc2", []int{1, 2}, true},
-		{"pqr3stu8vwx", []int{3, 8}, true},
-		{"a1b2c3d4e5f", []int{1, 2, 3, 4, 5}, true},
-		{"treb7uchet", []int{7}, true},
+		{"1abc2", []int{1, 2}},
+		{"pqr3stu8vwx", []int{3, 8}},
+		{"a1b2c3d4e5f", []int{1, 2, 3, 4, 5}},
+		{"treb7uchet", []int{7}},
 	}
 
 	for _, test := range tests {
-		if got, result := test.Test(); result != test.Pass {
+		if got, result := test.Test(); !result {
 			t.Errorf("input: %+v. got: %d, wanted %d", test.Input, got, test.Expected)
 		}
 	}
@@ -57,14 +55,14 @@ func TestParseNumbersFromString(t *testing.T) {
 
 func TestParseCalibrationNumbers(t *testing.T) {
 	tests := []ParseCalibrationTest{
-		{"1abc2", 12, true},
-		{"pqr3stu8vwx", 38, true},
-		{"a1b2c3d4e5f", 15, true},
-		{"treb7uchet", 77, true},
+		{"1abc2", 12},
+		{"pqr3stu8vwx", 38},
+		{"a1b2c3d4e5f", 15},
+		{"treb7uchet", 77},
 	}
 
 	for _, test := range tests {
-		if got, result := test.Test(); result != test.Pass {
+		if got, result := test.Test(); !result {
 			t.Errorf("input: %+v. got: %d, wanted %d", test.Input, got, test.Expected)
 		}
 	}
