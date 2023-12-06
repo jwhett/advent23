@@ -59,3 +59,14 @@ func TestParseGame(t *testing.T) {
 		t.Errorf("parseGame: Unexpected number of rounds parsed. Expected: %d, Got: %d", len(expected.Rounds), len(game.Rounds))
 	}
 }
+
+func TestIsPossibleGame(t *testing.T) {
+	passingGame := parseGame("Game 1: 3 blue, 4 red; 1 red, 2 green, 6 blue; 2 green")
+	impossibleGame := parseGame("Game 3: 8 green, 6 blue, 20 red; 5 blue, 4 red, 13 green; 5 green, 1 redGame 3: 8 green, 6 blue, 20 red; 5 blue, 4 red, 13 green; 5 green, 1 red")
+	if !bag.IsPOssibleGame(passingGame) {
+		t.Error("IsPossibleGame: game was expected to pass.")
+	}
+	if bag.IsPOssibleGame(impossibleGame) {
+		t.Error("IsPossibleGame: game was expected to fail.")
+	}
+}
