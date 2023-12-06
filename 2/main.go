@@ -24,6 +24,15 @@ type Bag struct {
 	Red, Green, Blue int
 }
 
+func (b Bag) IsPOssibleGame(game Game) bool {
+	for _, round := range game.Rounds {
+		if round.Red > b.Red || round.Green > b.Green || round.Blue > b.Blue {
+			return false
+		}
+	}
+	return true
+}
+
 // Rounds are handfuls of cubes. The three fields represent
 // how many of each color were drawn from that round.
 //
@@ -88,12 +97,19 @@ func main() {
 	}
 	defer file.Close()
 
+	var sumPossibleGames int
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
-		// line = scanner.Text()
+		line := scanner.Text()
+		game := parseGame(line)
+		if bag.IsPOssibleGame(game) {
+			sumPossibleGames += game.Id
+		}
 	}
 
 	if err := scanner.Err(); err != nil {
 		fmt.Printf("Scanner error: %v", err)
 	}
+
+	fmt.Printf("Sum of possible game IDs: %d\n", sumPossibleGames)
 }
