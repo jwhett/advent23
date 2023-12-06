@@ -11,6 +11,13 @@ const (
 	inputFile = "input"
 )
 
+// Positions of each color.
+const (
+	REDPOS int = iota
+	GREENPOS
+	BLUEPOS
+)
+
 // Bag is a container from which we pull Rounds from. The
 // fields represent the maximum number of each color cube.
 type Bag struct {
@@ -49,13 +56,21 @@ func parseRounds(line string) []Round {
 	rawRounds := strings.Split(line, ";")
 	for _, rawRound := range rawRounds {
 		cubes := parseCubes(rawRound)
-		rounds = append(rounds, Round{cubes[0], cubes[1], cubes[2]})
+		rounds = append(rounds, Round{cubes[REDPOS], cubes[GREENPOS], cubes[BLUEPOS]})
 	}
 	return rounds
 }
 
 func parseCubes(input string) []int {
-	return []int{0, 0, 0}
+	found := make(map[string]int, 0)
+	rawCubes := strings.Split(input, ", ")
+	for set := range rawCubes {
+		var count int
+		var color string
+		fmt.Sscanf(rawCubes[set], "%d %s", &count, &color)
+		found[color] = count
+	}
+	return []int{found["red"], found["green"], found["blue"]}
 }
 
 var (
