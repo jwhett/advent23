@@ -52,3 +52,11 @@ func TestIsPossibleGame(t *testing.T) {
 		t.Error("IsPossibleGame: game was expected to fail.")
 	}
 }
+
+func TestFewestCubePower(t *testing.T) {
+	game := parseGame("Game 1: 3 blue, 4 red; 1 red, 2 green, 6 blue; 2 green")
+	expected := 4 * 2 * 6
+	if pow := game.FewestCubePower(); pow != expected {
+		t.Errorf("FewestCubePower: failed to calculate expected power. Got: %d, Expected: %d", pow, expected)
+	}
+}

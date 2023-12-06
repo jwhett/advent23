@@ -52,6 +52,26 @@ type Game struct {
 	Rounds []Round
 }
 
+// FewestCubePower calculates the fewest cubes necessary
+// to play a given game then returns the "power" which
+// is defined as the product of the fewest Red, Green,
+// and Blue cubes.
+func (g Game) FewestCubePower() int {
+	neededRed, neededGreen, neededBlue := -1, -1, -1
+	for _, round := range g.Rounds {
+		if neededRed == -1 || round.Red > neededRed {
+			neededRed = round.Red
+		}
+		if neededGreen == -1 || round.Green > neededGreen {
+			neededGreen = round.Green
+		}
+		if neededBlue == -1 || round.Blue > neededBlue {
+			neededBlue = round.Blue
+		}
+	}
+	return neededRed * neededGreen * neededBlue
+}
+
 func parseGame(line string) Game {
 	gameInfo := strings.Split(line, ": ")
 	var gameId int
@@ -97,7 +117,7 @@ func main() {
 	}
 	defer file.Close()
 
-	var sumPossibleGames int
+	var sumPossibleGames, sumPowers int
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
 		line := scanner.Text()
@@ -105,6 +125,7 @@ func main() {
 		if bag.IsPOssibleGame(game) {
 			sumPossibleGames += game.Id
 		}
+		sumPowers += game.FewestCubePower()
 	}
 
 	if err := scanner.Err(); err != nil {
@@ -112,4 +133,5 @@ func main() {
 	}
 
 	fmt.Printf("Sum of possible game IDs: %d\n", sumPossibleGames)
+	fmt.Printf("Sum of cube powers: %d\n", sumPowers)
 }
