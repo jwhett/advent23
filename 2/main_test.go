@@ -50,9 +50,9 @@ func TestParseGame(t *testing.T) {
 	expected := Game{
 		1,
 		[]Round{
-			Round{4, 0, 3},
-			Round{1, 2, 6},
-			Round{0, 2, 0},
+			{4, 0, 3},
+			{1, 2, 6},
+			{0, 2, 0},
 		},
 	}
 	if len(game.Rounds) != len(expected.Rounds) {
