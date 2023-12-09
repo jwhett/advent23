@@ -1,6 +1,3 @@
-// Template file only!
-// Saving some time each day to ensure I
-// actually write tests.
 package main
 
 import "testing"
@@ -11,7 +8,14 @@ type CardTest struct {
 }
 
 func (ct CardTest) ParseCard() bool {
-	return false
+	card, err := NewCardFromString(ct.Input)
+	if err != nil {
+		panic(err)
+	}
+	if card.Id != ct.Expected.Id {
+		return false
+	}
+	return true
 }
 
 func TestCardParser(t *testing.T) {
