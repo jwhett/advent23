@@ -24,8 +24,11 @@ type WinningTest struct {
 	ExpectedValue   int
 }
 
-func (wt WinningTest) CheckWinner(card Card) ([]int, bool) {
-	return card.MatchingNumbers(), card.IsAWinner()
+func (wt WinningTest) CheckWinner(card Card) bool {
+	if wt.ExpectedValue != card.Value() {
+		return false
+	}
+	return true
 }
 
 func TestCardParser(t *testing.T) {
@@ -47,18 +50,21 @@ func TestCardParser(t *testing.T) {
 
 func TestWinningNumbers(t *testing.T) {
 	tests := []WinningTest{
-		{"Card 1: 41 48 83 86 17 | 83 86  6 31 17  9 48 53", []int{}, -1},
-		{"Card 2: 13 32 20 16 61 | 61 30 68 82 17 32 24 19", []int{}, -1},
-		{"Card 3:  1 21 53 59 44 | 69 82 63 72 16 21 14  1", []int{}, -1},
-		{"Card 4: 41 92 73 84 69 | 59 84 76 51 58  5 54 83", []int{}, -1},
-		{"Card 5: 87 83 26 28 32 | 88 30 70 12 93 22 82 36", []int{}, -1},
-		{"Card 6: 31 18 13 56 72 | 74 77 10 23 35 67 36 11", []int{}, -1},
+		{"Card 1: 41 48 83 86 17 | 83 86  6 31 17  9 48 53", []int{48, 83, 17, 86}, 8},
+		{"Card 2: 13 32 20 16 61 | 61 30 68 82 17 32 24 19", []int{32, 61}, 2},
+		{"Card 3:  1 21 53 59 44 | 69 82 63 72 16 21 14  1", []int{1, 21}, 2},
+		{"Card 4: 41 92 73 84 69 | 59 84 76 51 58  5 54 83", []int{84}, 1},
+		{"Card 5: 87 83 26 28 32 | 88 30 70 12 93 22 82 36", []int{}, 0},
+		{"Card 6: 31 18 13 56 72 | 74 77 10 23 35 67 36 11", []int{}, 0},
 	}
 
 	for _, test := range tests {
 		card, err := NewCardFromString(test.Input)
-		if matchingNumbers, ok := test.CheckWinner(card); !ok || err != nil {
-			t.Errorf("got: %+v, wanted: %+v, error: %v", matchingNumbers, test.ExpectedNumbers, err)
+		if err != nil {
+			panic(err)
+		}
+		if !test.CheckWinner(card) {
+			t.Errorf("got: %+v, wanted: %+v", card.Value(), test.ExpectedValue)
 		}
 		if card.Value() != test.ExpectedValue {
 			t.Errorf("card value - got: %d, wanted: %d", card.Value(), test.ExpectedValue)

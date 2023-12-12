@@ -3,7 +3,9 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"math"
 	"os"
+	"slices"
 	"strconv"
 	"strings"
 )
@@ -18,18 +20,29 @@ type Card struct {
 	ScratchedNumbers []int
 }
 
-func (c Card) MatchingNumbers() []int {
-	return []int{}
+func (c Card) MatchingNumbers() (matchingNubmers []int) {
+	for _, wn := range c.WinningNumbers {
+		if slices.Contains(c.ScratchedNumbers, wn) {
+			matchingNubmers = append(matchingNubmers, wn)
+		}
+	}
+	return matchingNubmers
 }
 
 func (c Card) IsAWinner() bool {
-	return false
+	return len(c.MatchingNumbers()) > 0
 }
 
 // Value returns the point value of a card given
 // its matching numbers.
 func (c Card) Value() int {
-	return 0
+	if !c.IsAWinner() {
+		return 0
+	}
+	if len(c.MatchingNumbers()) == 1 {
+		return 1
+	}
+	return int(math.Pow(2, float64((len(c.MatchingNumbers()) - 1))))
 }
 
 // atoiSlice applies strconv.Atoi to each element
