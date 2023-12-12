@@ -28,11 +28,31 @@ func parseCardId(in string) (int, error) {
 }
 
 func parseWinningNumbers(in string) []int {
-	return []int{}
+	rawNumberString := strings.Split(strings.Split(in, " | ")[0], ": ")
+	strList := strings.Fields(rawNumberString[len(rawNumberString)-1])
+	var convertedNumbers []int
+	for _, strnum := range strList {
+		num, err := strconv.Atoi(strnum)
+		if err != nil {
+			panic(err)
+		}
+		convertedNumbers = append(convertedNumbers, num)
+	}
+	return convertedNumbers
 }
 
 func parseScratchedNumbers(in string) []int {
-	return []int{}
+	fields := strings.Split(in, " | ")
+	scratchedNumbers := strings.Fields(fields[len(fields)-1])
+	var convertedNumbers []int
+	for _, strnum := range scratchedNumbers {
+		num, err := strconv.Atoi(strnum)
+		if err != nil {
+			panic(err)
+		}
+		convertedNumbers = append(convertedNumbers, num)
+	}
+	return convertedNumbers
 }
 
 func NewCardFromString(in string) (Card, error) {
