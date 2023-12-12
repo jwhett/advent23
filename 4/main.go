@@ -32,6 +32,21 @@ func (c Card) Value() int {
 	return 0
 }
 
+// atoiSlice applies strconv.Atoi to each element
+// of its input and returns a slice of their int
+// values.
+func atoiSlice(writtenNumber []string) []int {
+	var convertedNumbers []int
+	for _, strnum := range writtenNumber {
+		num, err := strconv.Atoi(strnum)
+		if err != nil {
+			panic(err)
+		}
+		convertedNumbers = append(convertedNumbers, num)
+	}
+	return convertedNumbers
+}
+
 func parseCardId(in string) (int, error) {
 	fields := strings.Fields(in)
 	rawId, err := strconv.Atoi(strings.ReplaceAll(fields[1], ":", ""))
@@ -44,29 +59,13 @@ func parseCardId(in string) (int, error) {
 func parseWinningNumbers(in string) []int {
 	rawNumberString := strings.Split(strings.Split(in, " | ")[0], ": ")
 	strList := strings.Fields(rawNumberString[len(rawNumberString)-1])
-	var convertedNumbers []int
-	for _, strnum := range strList {
-		num, err := strconv.Atoi(strnum)
-		if err != nil {
-			panic(err)
-		}
-		convertedNumbers = append(convertedNumbers, num)
-	}
-	return convertedNumbers
+	return atoiSlice(strList)
 }
 
 func parseScratchedNumbers(in string) []int {
 	fields := strings.Split(in, " | ")
 	scratchedNumbers := strings.Fields(fields[len(fields)-1])
-	var convertedNumbers []int
-	for _, strnum := range scratchedNumbers {
-		num, err := strconv.Atoi(strnum)
-		if err != nil {
-			panic(err)
-		}
-		convertedNumbers = append(convertedNumbers, num)
-	}
-	return convertedNumbers
+	return atoiSlice(scratchedNumbers)
 }
 
 func NewCardFromString(in string) (Card, error) {
