@@ -18,6 +18,20 @@ type Card struct {
 	ScratchedNumbers []int
 }
 
+func (c Card) MatchingNumbers() []int {
+	return []int{}
+}
+
+func (c Card) IsAWinner() bool {
+	return false
+}
+
+// Value returns the point value of a card given
+// its matching numbers.
+func (c Card) Value() int {
+	return 0
+}
+
 func parseCardId(in string) (int, error) {
 	fields := strings.Fields(in)
 	rawId, err := strconv.Atoi(strings.ReplaceAll(fields[1], ":", ""))
